@@ -26,8 +26,15 @@ public class Board {
 
     @Override
     public String toString() {
-        return "Board [id=" + id + ", title=" + title + ", author=" + author
-                + "]";
+        return "Board{" +
+                "id=" + id +
+                ", filePath='" + filePath + '\'' +
+                ", classification='" + classification + '\'' +
+                ", tag='" + tag + '\'' +
+                ", date='" + date + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 
     public int getId() {
