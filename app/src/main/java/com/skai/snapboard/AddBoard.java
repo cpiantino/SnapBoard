@@ -166,6 +166,9 @@ public class AddBoard extends AppCompatActivity {
     }
 
     // Return Home Method
+    private void returnIntent(View view) {
+        returnIntent();
+    }
     private void returnIntent() {
         Intent addBoardIntent = new Intent(AddBoard.this, Home.class);
         AddBoard.this.startActivity(addBoardIntent);
