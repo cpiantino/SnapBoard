@@ -4,15 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -25,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity
@@ -59,7 +53,7 @@ public class Home extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tirarFoto();
+                newBoard();
             }
         });
 
@@ -197,7 +191,7 @@ public class Home extends AppCompatActivity
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
                 if (speed > SHAKE_THRESHOLD) {
-                    tirarFoto();
+                    newBoard();
                 }
 
                 last_x = x;
@@ -212,22 +206,13 @@ public class Home extends AppCompatActivity
 
 
 
-    //------------------------------------------Foto------------------------------------------
+    //------------------------------------------Novo Quadro-----------------------------------
     //----------------------------------------------------------------------------------------
-    public void tirarFoto() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivityForResult(intent, 0);
+    public void newBoard() {
+        Intent addBoardIntent = new Intent(Home.this, AddBoard.class);
+        Home.this.startActivity(addBoardIntent);
     }
 
-    public void tirarFoto(View view) {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivityForResult(intent, 0);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
 
 
 

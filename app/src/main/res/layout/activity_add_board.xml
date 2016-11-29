@@ -76,7 +76,7 @@
 
     <Button android:id="@+id/saveButton"
         android:text="@string/save_button"
-        android:onClick="startBoardCapture"
+        android:onClick="insertData"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
 
     <Button android:id="@+id/deleteButton"
         android:text="@string/delete_button"
-        android:onClick="insertData"
+        android:onClick=""
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
