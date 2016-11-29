@@ -85,7 +85,7 @@
 
     <Button android:id="@+id/deleteButton"
         android:text="@string/delete_button"
-        android:onClick="returnIntent"
+        android:onClick="returnHome"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
