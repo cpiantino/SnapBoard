@@ -55,8 +55,6 @@ public class AddBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_board);
 
-        mImageView = (ImageView) findViewById(R.id.imageView);
-
         LocationManager senLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         try {
             location = senLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -132,6 +130,7 @@ public class AddBoard extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
+                mImageView = (ImageView) findViewById(R.id.boardView);
                 mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
                 mImageView.setImageBitmap(mImageBitmap);
             } catch (IOException e) {
