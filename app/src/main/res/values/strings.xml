@@ -12,4 +12,8 @@
     <string name="date_title">Data e Hora</string>
     <string name="save_button">Salvar</string>
     <string name="delete_button">Apagar</string>
+    <string name="add_subject_button">Nova Matéria</string>
+    <string name="submenu_title">Menu</string>
+    <string name="add_board">Novo Quadro</string>
+    <string name="view_subjects_button">Materias</string>
 </resources>
