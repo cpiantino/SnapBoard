@@ -31,7 +31,8 @@ public class Home extends AppCompatActivity
     private static final int SHAKE_THRESHOLD = 800;
 
     // Banco de Dados
-    private QuadroDBHelper dbHelper;
+    private QuadroDBHelper quadroDBHelper;
+    private SubjectDBHelper subjectDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +75,19 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Initialize DB
-        dbHelper = new QuadroDBHelper(this);
+        quadroDBHelper = new QuadroDBHelper(this);
+        subjectDBHelper = new SubjectDBHelper(this);
         //clearAll();
+
+        // Try add new Board
+        Board board;
+        board = (Board)getIntent().getSerializableExtra("newBoard");
+        if (board != null) quadroDBHelper.addBoard(board);
     }
 
     /*// Initialize DB
     private void clearAll() {
-        dbHelper.getWritableDatabase().delete(QuadroDBHelper.DATABASE_NAME, null, null);
+        quadroDBHelper.getWritableDatabase().delete(QuadroDBHelper.DATABASE_NAME, null, null);
     }*/
 
 

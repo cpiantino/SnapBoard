@@ -1,9 +1,11 @@
 package com.skai.snapboard;
 
+import java.io.Serializable;
+
 /**
  * Created by SKai on 2016/11/28.
  */
-public class Subject {
+public class Subject implements Serializable {
     private int id;
     private String subject;
     private String day;

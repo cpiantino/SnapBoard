@@ -46,6 +46,9 @@ public class AddBoard extends AppCompatActivity {
     private double longitude = 0.0;
     String currentDateTimeString = "";
 
+    // Variable for database instance
+    QuadroDBHelper quadroDBHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,15 +161,16 @@ public class AddBoard extends AppCompatActivity {
         tag = tagEditText.getText().toString();
         board = new Board(photo, subject, tag, date, latitude, longitude);
         captureComplete = false;
-        returnHome();
+        returnHome(board);
     }
 
     // Return Home Method
     public void returnHome(View view) {
-        returnHome();
+        returnHome((Board)null);
     }
-    private void returnHome() {
+    private void returnHome(Board board) {
         Intent addBoardIntent = new Intent(AddBoard.this, Home.class);
+        addBoardIntent.putExtra("newBoard", board);
         AddBoard.this.startActivity(addBoardIntent);
     }
 }

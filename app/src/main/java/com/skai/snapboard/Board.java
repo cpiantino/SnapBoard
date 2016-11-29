@@ -1,9 +1,11 @@
 package com.skai.snapboard;
 
+import java.io.Serializable;
+
 /**
  * Created by SKai on 2016/11/28.
  */
-public class Board {
+public class Board implements Serializable {
     private int id;
     private String filePath;
     private String subject;
