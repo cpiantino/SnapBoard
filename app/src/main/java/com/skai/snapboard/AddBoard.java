@@ -162,14 +162,14 @@ public class AddBoard extends AppCompatActivity {
         tag = tagEditText.getText().toString();
         board = new Board(photo, classification, tag, date, latitude, longitude);
         captureComplete = false;
-        returnIntent();
+        returnHome();
     }
 
     // Return Home Method
-    private void returnIntent(View view) {
-        returnIntent();
+    public void returnHome(View view) {
+        returnHome();
     }
-    private void returnIntent() {
+    private void returnHome() {
         Intent addBoardIntent = new Intent(AddBoard.this, Home.class);
         AddBoard.this.startActivity(addBoardIntent);
     }
