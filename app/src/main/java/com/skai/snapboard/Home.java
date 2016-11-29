@@ -31,7 +31,7 @@ public class Home extends AppCompatActivity
     private static final int SHAKE_THRESHOLD = 800;
 
     // Banco de Dados
-    private MySQLiteHelper dbHelper;
+    private QuadroDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +74,13 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Initialize DB
-        dbHelper = new MySQLiteHelper(this);
+        dbHelper = new QuadroDBHelper(this);
         //clearAll();
     }
 
     /*// Initialize DB
     private void clearAll() {
-        dbHelper.getWritableDatabase().delete(MySQLiteHelper.DATABASE_NAME, null, null);
+        dbHelper.getWritableDatabase().delete(QuadroDBHelper.DATABASE_NAME, null, null);
     }*/
 
 

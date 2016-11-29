@@ -13,14 +13,14 @@ import android.util.Log;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MySQLiteHelper extends SQLiteOpenHelper {
+public class QuadroDBHelper extends SQLiteOpenHelper {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
     private static final String DATABASE_NAME = "BoardDB";
 
-    public MySQLiteHelper(Context context) {
+    public QuadroDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
