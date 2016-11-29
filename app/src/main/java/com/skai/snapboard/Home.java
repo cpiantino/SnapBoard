@@ -31,28 +31,12 @@ import android.widget.Toast;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
 
-    Bitmap img;
-
     // Variables for camera-on-shake
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 600;
-
-    // Variables for acquiring location
-    private LocationManager senLocationManager;
-    private Location location;
-    private double latitude = 0.0;
-    private double longitude = 0.0;
-    String currentDateTimeString = "";
-
-    // Variables for image grab and bitmap display
-    Uri imageFile;
-    ImageView imageView;
-    Bitmap help1;
-    ThumbnailUtils thumbnail;
-    String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +59,6 @@ public class Home extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //       Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //                .setAction("Action", null).show();
                 tirarFoto();
             }
         });
@@ -244,12 +226,7 @@ public class Home extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                img = (Bitmap) bundle.get("data");
-            }
-        }
+
     }
 
 

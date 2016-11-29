@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">SnapBoard</string>
 
+    <string name="tag_hint">Tag</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="tag_title">Tag:</string>
+    <string name="location_title">Local:</string>
+    <string name="date_title">Data e Hora</string>
+    <string name="save_button">Salvar</string>
+    <string name="delete_button">Apagar</string>
 </resources>
