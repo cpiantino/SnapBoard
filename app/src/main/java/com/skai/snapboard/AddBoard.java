@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.location.Location;
@@ -52,6 +54,15 @@ public class AddBoard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_board);
+
+        mImageView = (ImageView) findViewById(R.id.imageView);
+
+        LocationManager senLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        try {
+            location = senLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            } catch (SecurityException e) {
+        }
+
         startBoardCapture();
     }
 

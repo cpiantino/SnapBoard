@@ -32,6 +32,9 @@ public class Home extends AppCompatActivity
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 600;
 
+    // Banco de Dados
+    private MySQLiteHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,11 @@ public class Home extends AppCompatActivity
                  Manifest.permission.CAMERA,
                  Manifest.permission.ACCESS_FINE_LOCATION};
         ActivityCompat.requestPermissions(Home.this, permissions, 1);
+
+        // Initialize Shake Sensors
+        senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Set Layout
         setContentView(R.layout.activity_home);
@@ -66,11 +74,15 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Initialize camera-on-shake sensors
-        senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        // Initialize DB
+        dbHelper = new MySQLiteHelper(this);
+        //clearAll();
     }
+
+    /*// Initialize DB
+    private void clearAll() {
+        dbHelper.getWritableDatabase().delete(MySQLiteHelper.DATABASE_NAME, null, null);
+    }*/
 
 
 
