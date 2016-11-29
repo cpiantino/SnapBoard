@@ -5,29 +5,25 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-
-import com.skai.snapboard.MySQLiteHelper;
-import com.skai.snapboard.Board;
 
 public class AddBoard extends AppCompatActivity {
 
@@ -39,9 +35,9 @@ public class AddBoard extends AppCompatActivity {
     private static final String TAG = "AddBoard";
     private boolean captureComplete = false;
 
-    // Image tag and classification
+    // Image tag and subject
     private String tag = "";
-    private String classification = "";
+    private String subject = "";
 
     // Variables for acquiring location
     private LocationManager senLocationManager;
@@ -157,10 +153,10 @@ public class AddBoard extends AppCompatActivity {
     }
     private void insertData(String photo, double latitude, double longitude, String date) {
         Board board;
-        classification = "";
+        subject = "";
         EditText tagEditText = (EditText)findViewById(R.id.tagEditText);
         tag = tagEditText.getText().toString();
-        board = new Board(photo, classification, tag, date, latitude, longitude);
+        board = new Board(photo, subject, tag, date, latitude, longitude);
         captureComplete = false;
         returnHome();
     }

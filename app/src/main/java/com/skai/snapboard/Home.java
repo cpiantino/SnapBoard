@@ -9,7 +9,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -19,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity
@@ -30,7 +28,7 @@ public class Home extends AppCompatActivity
     private Sensor senAccelerometer;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 1000;
+    private static final int SHAKE_THRESHOLD = 800;
 
     // Banco de Dados
     private MySQLiteHelper dbHelper;
@@ -57,14 +55,14 @@ public class Home extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Floating Camera Button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+/*        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 newBoard();
             }
         });
-        fab.setBackgroundColor(0x3F51B5);
+        fab.setBackgroundColor(0x3F51B5);*/
 
         // Drawer Menu Layout
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -155,10 +153,9 @@ public class Home extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {}
+        if (id == R.id.nav_camera) {newBoard();}
         else if (id == R.id.nav_subjects) {}
-        else if (id == R.id.nav_add_subject) {
-        }
+        else if (id == R.id.nav_add_subject) {}
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

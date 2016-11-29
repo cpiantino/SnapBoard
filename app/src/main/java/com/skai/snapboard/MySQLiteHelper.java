@@ -3,17 +3,15 @@ package com.skai.snapboard;
 /**
  * Created by SKai on 2016/11/28.
  */
-import java.util.LinkedList;
-import java.util.List;
-
-import com.skai.snapboard.Board;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
@@ -32,7 +30,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String CREATE_BOARD_TABLE =  "CREATE TABLE boards ( " +
                                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                     "filePath TEXT, "+
-                                    "classification TEXT, "+
+                                    "subject TEXT, "+
                                     "tag TEXT, "+
                                     "date TEXT, "+
                                     "latitude REAL, "+
@@ -63,13 +61,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Boards Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_FILEPATH = "filePath";
-    private static final String KEY_CLASSIFICATION = "classification";
+    private static final String KEY_SUBJECT = "subject";
     private static final String KEY_TAG = "tag";
     private static final String KEY_DATE = "date";
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGITUDE = "longitude";
 
-    private static final String[] COLUMNS = {KEY_ID,KEY_FILEPATH,KEY_CLASSIFICATION,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE};
+    private static final String[] COLUMNS = {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE};
 
     public void addBoard(Board board){
         Log.d("addBoard", board.toString());
@@ -79,7 +77,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
         values.put(KEY_FILEPATH, board.getFilePath()); // get filePath
-        values.put(KEY_CLASSIFICATION, board.getClassification()); // get classification
+        values.put(KEY_SUBJECT, board.getSubject()); // get subject
         values.put(KEY_TAG, board.getTag()); // get tag
         values.put(KEY_DATE, board.getDate()); // get date
         values.put(KEY_LATITUDE, board.getLatitude()); // get latitude
@@ -118,7 +116,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Board board = new Board();
         board.setId(Integer.parseInt(cursor.getString(0)));
         board.setFilePath(cursor.getString(1));
-        board.setClassification(cursor.getString(2));
+        board.setSubject(cursor.getString(2));
         board.setTag(cursor.getString(3));
         board.setDate(cursor.getString(4));
         board.setLatitude(Double.parseDouble(cursor.getString(5)));
@@ -148,7 +146,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 board = new Board();
                 board.setId(Integer.parseInt(cursor.getString(0)));
                 board.setFilePath(cursor.getString(1));
-                board.setClassification(cursor.getString(2));
+                board.setSubject(cursor.getString(2));
                 board.setTag(cursor.getString(3));
                 board.setDate(cursor.getString(4));
                 board.setLatitude(Double.parseDouble(cursor.getString(5)));
@@ -174,7 +172,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
         values.put("filePath", board.getFilePath()); // get filePath
-        values.put("classification", board.getClassification()); // get classification
+        values.put("subject", board.getSubject()); // get subject
         values.put("tag", board.getTag()); // get tag
         values.put("date", board.getDate());
         values.put("latitude", board.getLatitude());

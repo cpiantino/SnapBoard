@@ -1,22 +1,12 @@
 package com.skai.snapboard;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import com.skai.snapboard.MySQLiteHelper;
-
 /**
  * Created by SKai on 2016/11/28.
  */
 public class Board {
     private int id;
     private String filePath;
-    private String classification;
+    private String subject;
     private String tag;
     private String date;
     private double latitude;
@@ -24,10 +14,10 @@ public class Board {
 
     public Board(){}
 
-    public Board(String filePath, String classification, String tag, String date, double latitude, double longitude) {
+    public Board(String filePath, String subject, String tag, String date, double latitude, double longitude) {
         super();
         this.filePath = filePath;
-        this.classification = classification;
+        this.subject = subject;
         this.tag = tag;
         this.date = date;
         this.latitude = latitude;
@@ -40,20 +30,20 @@ public class Board {
     // Boards Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_FILEPATH = "filePath";
-    private static final String KEY_CLASSIFICATION = "classification";
+    private static final String KEY_SUBJECT = "subject";
     private static final String KEY_TAG = "tag";
     private static final String KEY_DATE = "date";
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGITUDE = "longitude";
 
-    private static final String[] COLUMNS = {KEY_ID,KEY_FILEPATH, KEY_CLASSIFICATION, KEY_TAG, KEY_DATE, KEY_LATITUDE, KEY_LONGITUDE};
+    private static final String[] COLUMNS = {KEY_ID,KEY_FILEPATH, KEY_SUBJECT, KEY_TAG, KEY_DATE, KEY_LATITUDE, KEY_LONGITUDE};
 
     @Override
     public String toString() {
         return "Board{" +
                 "id=" + id +
                 ", filePath='" + filePath + '\'' +
-                ", classification='" + classification + '\'' +
+                ", subject='" + subject + '\'' +
                 ", tag='" + tag + '\'' +
                 ", date='" + date + '\'' +
                 ", latitude=" + latitude +
@@ -77,12 +67,12 @@ public class Board {
         this.filePath = filePath;
     }
 
-    public String getClassification() {
-        return classification;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setClassification(String classification) {
-        this.classification = classification;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getTag() {
