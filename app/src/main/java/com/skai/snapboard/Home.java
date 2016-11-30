@@ -35,6 +35,9 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.List;
+
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
 
@@ -334,6 +337,8 @@ public class Home extends AppCompatActivity
     //----------------------------------------------------------------------------------------
     public void newBoard() {
         Intent addBoardIntent = new Intent(Home.this, AddBoard.class);
+        String subjectSuggestion = getSubjectSuggestion();
+        addBoardIntent.putExtra("subjectSuggestion", subjectSuggestion);
         Home.this.startActivity(addBoardIntent);
     }
 
@@ -343,6 +348,43 @@ public class Home extends AppCompatActivity
         Home.this.startActivity(editBoardIntent);
     }
 
+    public String getSubjectSuggestion() {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        String[] days = getResources().getStringArray(R.array.day_list);
+        String today = "";
+        int hourNow = calendar.get(Calendar.HOUR_OF_DAY);
+        int minuteNow = calendar.get(Calendar.MINUTE);
+        String suggestion = null;
+
+        switch (day) {
+            case Calendar.MONDAY: {     today = days[0]; break; }
+            case Calendar.TUESDAY: {    today = days[1]; break; }
+            case Calendar.WEDNESDAY: {  today = days[2]; break; }
+            case Calendar.THURSDAY: {   today = days[3]; break; }
+            case Calendar.FRIDAY: {     today = days[4]; break; }
+            case Calendar.SATURDAY: {   today = days[5]; break; }
+            case Calendar.SUNDAY: {     today = days[6]; break; }
+        }
+
+        List<Subject> allSubjects = subjectDBHelper.getAllSubjects();
+        for (Subject subject : allSubjects) {
+            String[] hourMinStart = subject.getStart().split(",");
+            int hourStart = Integer.parseInt(hourMinStart[0]);
+            int minuteStart = Integer.parseInt(hourMinStart[1]);
+            String[] hourMinEnd = subject.getEnd().split(",");
+            int hourEnd = Integer.parseInt(hourMinEnd[0]);
+            int minuteEnd = Integer.parseInt(hourMinEnd[1]);
+            if (today.compareTo(subject.getDay())==0) {
+                if ((hourStart<=hourNow)      && (hourNow<=hourEnd)) {
+                    if ((minuteStart<=minuteNow)  && ((minuteNow<=minuteEnd)||minuteEnd==0)) {
+                        suggestion = subject.getSubject();
+                    }
+                }
+            }
+        }
+        return suggestion;
+    }
 
 
 
@@ -371,16 +413,14 @@ public class Home extends AppCompatActivity
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int time = timePicker.getCurrentHour()+timePicker.getCurrentMinute();
-                start = Integer.toString(time);
+                start = timePicker.getCurrentHour()+","+timePicker.getCurrentMinute();
                 startButton.setText(timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute());
             }
         });
         endButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int time = timePicker.getCurrentHour()+timePicker.getCurrentMinute();
-                end = Integer.toString(time);
+                end = timePicker.getCurrentHour()+","+timePicker.getCurrentMinute();
                 endButton.setText(timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute());
             }
         });

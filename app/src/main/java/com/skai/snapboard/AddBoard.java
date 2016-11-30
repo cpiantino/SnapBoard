@@ -46,6 +46,9 @@ public class AddBoard extends AppCompatActivity {
     private double longitude = 0.0;
     String currentDateTimeString = "";
 
+    // Variable for Subject Suggestion
+    private String subjectSuggestion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,8 @@ public class AddBoard extends AppCompatActivity {
             location = senLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             } catch (SecurityException e) {
         }
+
+        subjectSuggestion = (String)getIntent().getCharSequenceExtra("subjectSuggestion");
 
         startBoardCapture();
     }
@@ -94,9 +99,11 @@ public class AddBoard extends AppCompatActivity {
         longitude = location.getLongitude();
         currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
+        EditText subjectText = (EditText) findViewById(R.id.subjectEditText);
         TextView latitudeText = (TextView) findViewById(R.id.locationTextView);
         TextView dataText = (TextView) findViewById(R.id.dateTextView);
 
+        if (subjectSuggestion!=null) subjectText.setText(subjectSuggestion);
         latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
         dataText.setText(currentDateTimeString);
     }
