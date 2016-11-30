@@ -67,6 +67,9 @@ public class QuadroDBHelper extends SQLiteOpenHelper {
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
 
+    // TAG for filtered query
+    private static final String TAG = "QuadroDBHelper";
+
     private static final String[] COLUMNS = {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE};
 
     public void addBoard(Board board){
@@ -218,6 +221,28 @@ public class QuadroDBHelper extends SQLiteOpenHelper {
         Cursor mCursor = db.query(TABLE_BOARDS, new String[] {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE},
                 null, null, null, null, null);
 
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
+    public Cursor fetchBoardsByTag(String inputText) {
+        Log.w(TAG, inputText);
+        
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        
+        Cursor mCursor = null;
+        if (inputText == null  ||  inputText.length () == 0)  {
+            mCursor = db.query(TABLE_BOARDS, new String[] {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE},
+                    null, null, null, null, null);
+
+        }
+        else {
+            mCursor = db.query(true, TABLE_BOARDS, new String[] {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE}, KEY_TAG + " like '%" + inputText + "%'", null,
+                    null, null, null, null);
+        }
         if (mCursor != null) {
             mCursor.moveToFirst();
         }

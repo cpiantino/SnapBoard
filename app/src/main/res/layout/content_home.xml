@@ -9,7 +9,14 @@
     tools:context="com.skai.snapboard.Home"
     tools:showIn="@layout/app_bar_home">
 
+    <EditText android:id="@+id/tagFilter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tagFilterHint"
+        android:inputType="textVisiblePassword"/>
+
     <ListView android:id="@+id/boardList"
+        android:layout_below="@id/tagFilter"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"></ListView>
 </RelativeLayout>
