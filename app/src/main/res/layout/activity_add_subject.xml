@@ -3,12 +3,13 @@
 <RelativeLayout android:id="@+id/add_subject"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="250dp"
-    android:layout_height="250dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="com.skai.snapboard.AddSubject">
 
     <EditText android:id="@+id/nameEditText"
@@ -24,6 +25,7 @@
     <TextView android:id="@+id/dayTitle"
         android:text="@string/day_title"
 
+        android:layout_alignRight="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
@@ -39,34 +41,33 @@
         android:layout_toEndOf="@+id/dayTitle"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView android:id="@+id/startTitle"
+    <Button android:id="@+id/startButton"
         android:text="@string/start_title"
 
+        android:layout_marginLeft="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:layout_below="@+id/dayTitle"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="11dp" />
 
-    <TextView android:id="@+id/endTitle"
+
+    <Button android:id="@+id/endButton"
         android:text="@string/end_title"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:layout_below="@+id/startTitle"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/startButton"
+        android:layout_marginTop="11dp"/>
 
-    <Button android:id="@+id/deleteButton"
-        android:text="@string/delete_button"
-        android:onClick="returnHome"
+    <TimePicker android:id="@+id/timePicker"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/startButton"/>
+
 
     <Button android:id="@+id/saveButton"
         android:text="@string/save_button"
@@ -76,5 +77,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+
+    <Button android:id="@+id/deleteButton"
+        android:text="@string/delete_button"
+        android:onClick="returnHome"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

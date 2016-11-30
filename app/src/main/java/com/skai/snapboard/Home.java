@@ -10,6 +10,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -30,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity
@@ -184,10 +187,10 @@ public class Home extends AppCompatActivity
                 // Get the cursor, positioned to the corresponding row in the result set
                 Cursor cursor = (Cursor) listView.getItemAtPosition(position);
 
-                // Get the state's capital from this row in the database.
-                String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("code"));
-                Toast.makeText(getApplicationContext(), countryCode, Toast.LENGTH_SHORT).show();
-
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow("filePath"))), "image/*");
+                startActivity(intent);
             }
         });
 
@@ -345,21 +348,57 @@ public class Home extends AppCompatActivity
 
     //-----------------------------------------Matérias---------------------------------------
     //----------------------------------------------------------------------------------------
+    // Variables for making Subject
+    private Subject newSubject;
+    private String subjectName = "SUBJECT";
+    private String day = "day";
+    private String start = "";
+    private String end = "";
+
     private void newSubject() {
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.activity_add_subject);
 
+        // Variables from dialog
+        final Button startButton = (Button) dialog.findViewById(R.id.startButton);
+        final Button endButton = (Button) dialog.findViewById(R.id.endButton);
         Button saveButton = (Button) dialog.findViewById(R.id.saveButton);
         Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
-        // if button is clicked, close the custom dialog
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        final TimePicker timePicker = (TimePicker)dialog.findViewById(R.id.timePicker);
+
+        // Button Handler
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                int time = timePicker.getCurrentHour()+timePicker.getCurrentMinute();
+                start = Integer.toString(time);
+                startButton.setText(timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute());
+            }
+        });
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int time = timePicker.getCurrentHour()+timePicker.getCurrentMinute();
+                end = Integer.toString(time);
+                endButton.setText(timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute());
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText subjectText = (EditText)dialog.findViewById(R.id.nameEditText);
+                Spinner mySpinner= (Spinner)dialog.findViewById(R.id.daySpinner);
+                subjectName = subjectText.getText().toString();
+                day = mySpinner.getSelectedItem().toString();
+                if (start.length()>0 && end.length()>0) {
+                    newSubject = new Subject(subjectName, day, start, end);
+                    subjectDBHelper.addSubject(newSubject);
+                    dialog.dismiss();
+                }
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

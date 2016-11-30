@@ -33,8 +33,8 @@
         <item>Sabado</item>
         <item>Domingo</item>
     </string-array>
-    <string name="start_title">Início</string>
-    <string name="end_title">Fim</string>
+    <string name="start_title">Marcar Início</string>
+    <string name="end_title">Marcar Fim</string>
 
     // Menu
     <string name="submenu_title">Matérias</string>
