@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
@@ -103,7 +102,7 @@ public class AddBoard extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         Date currentDate = calendar.getTime();
-        currentDateTimeString = DateFormat.getDateTimeInstance().format(currentDate);
+        currentDateTimeString = currentDate.toString();
 
         EditText subjectText = (EditText) findViewById(R.id.subjectEditText);
         TextView latitudeText = (TextView) findViewById(R.id.locationTextView);
