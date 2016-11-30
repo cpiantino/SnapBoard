@@ -1,19 +1,41 @@
 <resources>
+    // App Name
     <string name="app_name">SnapBoard</string>
 
-    <string name="tag_hint">Tag</string>
-
+    // Navigation
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    // Board
+    <string name="add_board">Novo Quadro</string>
     <string name="tag_title">Tag:</string>
+    <string name="tag_hint">Tag</string>
     <string name="location_title">Local:</string>
     <string name="date_title">Data e Hora</string>
     <string name="save_button">Salvar</string>
     <string name="delete_button">Apagar</string>
+
+    // Subject
     <string name="add_subject_button">Nova Matéria</string>
+    <string name="name_title">Nome</string>
+    <string name="name_hint">matéria</string>
+    <string name="day_title">Dia</string>
+    <string name="day_prompt">Escolha o Dia</string>
+    <string-array name="day_list">
+        <item>Segunda</item>
+        <item>Terça</item>
+        <item>Quarta</item>
+        <item>Quinta</item>
+        <item>Sexta</item>
+        <item>Sabado</item>
+        <item>Domingo</item>
+    </string-array>
+    <string name="start_title">Início</string>
+    <string name="end_title">Fim</string>
+
+    // Menu
     <string name="submenu_title">Menu</string>
-    <string name="add_board">Novo Quadro</string>
     <string name="view_subjects_button">Materias</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

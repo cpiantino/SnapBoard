@@ -11,67 +11,60 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.skai.snapboard.AddSubject">
 
-
-    <ImageView android:id="@+id/subjectView"
-
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText android:id="@+id/tagEditText"
-        android:text="@string/tag_title"
-        android:hint="@string/tag_hint"
-        android:inputType="textMultiLine"
+    <EditText android:id="@+id/nameEditText"
+        android:text="@string/name_title"
+        android:hint="@string/name_hint"
+        android:inputType="text"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"/>
 
-    <TextView android:id="@+id/locationTitle"
-        android:text="@string/location_title"
-        android:textColor="@color/colorPrimaryDark"
+    <TextView android:id="@+id/dayTitle"
+        android:text="@string/day_title"
 
-        android:layout_below="@+id/tagEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"/>
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_below="@+id/nameEditText"/>
 
-    <TextView android:id="@+id/locationTextView"
-        android:text=""
-        android:textColor="@color/colorAccent"
-        android:textStyle="normal|italic"
+    <Spinner android:id="@+id/daySpinner"
+        android:prompt="@string/day_prompt"
+        android:entries="@array/day_list"
 
-        android:layout_below="@+id/locationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/nameEditText"
+        android:layout_toEndOf="@+id/dayTitle"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+    <TextView android:id="@+id/startTitle"
+        android:text="@string/start_title"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_below="@+id/dayTitle"
         android:layout_alignParentStart="true"
         android:layout_marginTop="11dp" />
 
-    <TextView android:id="@+id/dateTitle"
-        android:text="@string/date_title"
-        android:textColor="@color/colorPrimaryDark"
+    <TextView android:id="@+id/endTitle"
+        android:text="@string/end_title"
 
-        android:layout_below="@+id/locationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_below="@+id/startTitle"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="11dp" />
 
-    <TextView android:id="@+id/dateTextView"
-        android:text=""
-        android:textColor="@color/colorAccent"
-        android:textStyle="normal|italic"
+    <Button android:id="@+id/deleteButton"
+        android:text="@string/delete_button"
+        android:onClick="returnHome"
 
-        android:layout_below="@+id/dateTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
     <Button android:id="@+id/saveButton"
@@ -81,15 +74,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/subjectView" />
+        android:layout_alignParentEnd="true" />
 
-    <Button android:id="@+id/deleteButton"
-        android:text="@string/delete_button"
-        android:onClick="returnHome"
-
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="100px"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@id/subjectView"/>
+        android:text=" Ok "
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        />
 
 </RelativeLayout>

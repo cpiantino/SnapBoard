@@ -1,6 +1,7 @@
 package com.skai.snapboard;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity
@@ -162,7 +165,7 @@ public class Home extends AppCompatActivity
 
         if (id == R.id.nav_camera) {newBoard();}
         else if (id == R.id.nav_subjects) {}
-        else if (id == R.id.nav_add_subject) {}
+        else if (id == R.id.nav_add_subject) {newSubject();}
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -214,7 +217,7 @@ public class Home extends AppCompatActivity
 
 
 
-    //------------------------------------------Novo Quadro-----------------------------------
+    //-----------------------------------------Quadros----------------------------------------
     //----------------------------------------------------------------------------------------
     public void newBoard() {
         Intent addBoardIntent = new Intent(Home.this, AddBoard.class);
@@ -224,6 +227,29 @@ public class Home extends AppCompatActivity
 
 
 
+    //-----------------------------------------Matérias---------------------------------------
     //----------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------
+    private void newSubject() {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.activity_add_subject);
+
+        Button saveButton = (Button) dialog.findViewById(R.id.saveButton);
+        Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
+        // if button is clicked, close the custom dialog
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
 }
