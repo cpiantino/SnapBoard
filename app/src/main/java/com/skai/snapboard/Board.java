@@ -26,6 +26,17 @@ public class Board implements Serializable {
         this.longitude = longitude;
     }
 
+    public Board(int id, String filePath, String subject, String tag, String date, double latitude, double longitude) {
+        super();
+        this.id = id;
+        this.filePath = filePath;
+        this.subject = subject;
+        this.tag = tag;
+        this.date = date;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     // Boards table name
     private static final String TABLE_BOARDS = "boards";
 

@@ -16,9 +16,9 @@ import java.util.List;
 public class QuadroDBHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 1;
     // Database Name
-    private static final String DATABASE_NAME = "BoardDB";
+    public static final String DATABASE_NAME = "BoardDB";
 
     public QuadroDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,7 +28,7 @@ public class QuadroDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create book table
         String CREATE_BOARD_TABLE =  "CREATE TABLE boards ( " +
-                                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                     "filePath TEXT, "+
                                     "subject TEXT, "+
                                     "tag TEXT, "+
@@ -59,13 +59,13 @@ public class QuadroDBHelper extends SQLiteOpenHelper {
     private static final String TABLE_BOARDS = "boards";
 
     // Boards Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_FILEPATH = "filePath";
-    private static final String KEY_SUBJECT = "subject";
-    private static final String KEY_TAG = "tag";
-    private static final String KEY_DATE = "date";
-    private static final String KEY_LATITUDE = "latitude";
-    private static final String KEY_LONGITUDE = "longitude";
+    public static final String KEY_ID = "_id";
+    public static final String KEY_FILEPATH = "filePath";
+    public static final String KEY_SUBJECT = "subject";
+    public static final String KEY_TAG = "tag";
+    public static final String KEY_DATE = "date";
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGITUDE = "longitude";
 
     private static final String[] COLUMNS = {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE};
 
@@ -101,7 +101,7 @@ public class QuadroDBHelper extends SQLiteOpenHelper {
         Cursor cursor =
                 db.query(TABLE_BOARDS, // a. table
                         COLUMNS, // b. column names
-                        " id = ?", // c. selections
+                        " _id = ?", // c. selections
                         new String[] { String.valueOf(id) }, // d. selections args
                         null, // e. group by
                         null, // f. having
@@ -207,5 +207,20 @@ public class QuadroDBHelper extends SQLiteOpenHelper {
 
         Log.d("deleteBoard", board.toString());
 
+    }
+
+    public Cursor fetchAllBoards() {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. Query db to build Cursor
+        Cursor mCursor = db.query(TABLE_BOARDS, new String[] {KEY_ID,KEY_FILEPATH,KEY_SUBJECT,KEY_TAG,KEY_DATE,KEY_LATITUDE,KEY_LONGITUDE},
+                null, null, null, null, null);
+
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
     }
 }

@@ -36,8 +36,8 @@ public class AddBoard extends AppCompatActivity {
     private boolean captureComplete = false;
 
     // Image tag and subject
-    private String tag = "";
-    private String subject = "";
+    private String tag = "TAG";
+    private String subject = "SUBJECT";
 
     // Variables for acquiring location
     private LocationManager senLocationManager;
@@ -45,9 +45,6 @@ public class AddBoard extends AppCompatActivity {
     private double latitude = 0.0;
     private double longitude = 0.0;
     String currentDateTimeString = "";
-
-    // Variable for database instance
-    QuadroDBHelper quadroDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +128,12 @@ public class AddBoard extends AppCompatActivity {
             try {
                 mImageView = (ImageView) findViewById(R.id.boardView);
                 mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+
+                float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
+                int width = 480;
+                int height = Math.round(width / aspectRatio);
+                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);
+
                 mImageView.setImageBitmap(mImageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -139,8 +142,8 @@ public class AddBoard extends AppCompatActivity {
     }
 
     // Salvar Quadro no BD
-    public void insertData(View view) {
-        if (mCurrentPhotoPath!=null && captureComplete) insertData(mCurrentPhotoPath, latitude, longitude, currentDateTimeString);
+    public void saveData(View view) {
+        if (mCurrentPhotoPath!=null && captureComplete) saveData(mCurrentPhotoPath, latitude, longitude, currentDateTimeString);
         else {
             AlertDialog alertDialog = new AlertDialog.Builder(AddBoard.this).create();
             alertDialog.setTitle("Não há quadro!");
@@ -154,21 +157,22 @@ public class AddBoard extends AppCompatActivity {
             alertDialog.show();
         }
     }
-    private void insertData(String photo, double latitude, double longitude, String date) {
+    private void saveData(String photo, double latitude, double longitude, String date) {
         Board board;
-        subject = "";
+        EditText subjectEditText = (EditText)findViewById(R.id.subjectEditText);
+        subject = subjectEditText.getText().toString();
         EditText tagEditText = (EditText)findViewById(R.id.tagEditText);
         tag = tagEditText.getText().toString();
         board = new Board(photo, subject, tag, date, latitude, longitude);
         captureComplete = false;
-        returnHome(board);
+        deleteData(board);
     }
 
     // Return Home Method
-    public void returnHome(View view) {
-        returnHome((Board)null);
+    public void deleteData(View view) {
+        deleteData((Board)null);
     }
-    private void returnHome(Board board) {
+    private void deleteData(Board board) {
         Intent addBoardIntent = new Intent(AddBoard.this, Home.class);
         addBoardIntent.putExtra("newBoard", board);
         AddBoard.this.startActivity(addBoardIntent);

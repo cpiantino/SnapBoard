@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,13 +15,17 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity
@@ -33,9 +38,12 @@ public class Home extends AppCompatActivity
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 800;
 
-    // Banco de Dados
+    // Databases
     private QuadroDBHelper quadroDBHelper;
     private SubjectDBHelper subjectDBHelper;
+
+    // Variables for ListView
+    private SimpleCursorAdapter boardListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +88,24 @@ public class Home extends AppCompatActivity
         // Initialize DB
         quadroDBHelper = new QuadroDBHelper(this);
         subjectDBHelper = new SubjectDBHelper(this);
-        //clearAll();
+        // if (quadroDBHelper != null) clearAll();
 
-        // Try add new Board
-        Board board;
-        board = (Board)getIntent().getSerializableExtra("newBoard");
-        if (board != null) quadroDBHelper.addBoard(board);
-    }
+        //Generate ListView from SQLite Database
+        if (quadroDBHelper.fetchAllBoards() != null) displayListView();
 
-    /*// Initialize DB
+        // Try add new Board or edit Board
+        Board newBoard = (Board)getIntent().getSerializableExtra("newBoard");
+        Board editBoard = (Board)getIntent().getSerializableExtra("editBoard");
+        Board deleteBoard = (Board)getIntent().getSerializableExtra("deleteBoard");
+        if (newBoard != null) { quadroDBHelper.addBoard(newBoard); boardListAdapter.notifyDataSetChanged(); }
+        if (editBoard != null) { quadroDBHelper.updateBoard(editBoard); boardListAdapter.notifyDataSetChanged(); }
+        if (deleteBoard != null) { quadroDBHelper.deleteBoard(deleteBoard); boardListAdapter.notifyDataSetChanged(); }
+        }
+
+    // Initialize DB
     private void clearAll() {
         quadroDBHelper.getWritableDatabase().delete(QuadroDBHelper.DATABASE_NAME, null, null);
-    }*/
+    }
 
 
 
@@ -119,6 +133,100 @@ public class Home extends AppCompatActivity
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+    
+    
+    
+    //---------------------------------List View Handler--------------------------------------
+    //----------------------------------------------------------------------------------------
+    private void displayListView() {
+
+
+        Cursor cursor = quadroDBHelper.fetchAllBoards();
+
+        // The desired columns to be bound
+        String[] columns = new String[] {
+                QuadroDBHelper.KEY_FILEPATH,
+                QuadroDBHelper.KEY_SUBJECT,
+                QuadroDBHelper.KEY_TAG,
+                QuadroDBHelper.KEY_DATE
+        };
+
+        // the XML defined views which the data will be bound to
+        int[] to = new int[] {
+                R.id.board,
+                R.id.subject,
+                R.id.tag,
+                R.id.date
+        };
+
+        // create the adapter using the cursor pointing to the desired data 
+        //as well as the layout information
+        boardListAdapter = new SimpleCursorAdapter(
+                this, R.layout.board_item,
+                cursor,
+                columns,
+                to,
+                0);
+
+        ListView listView = (ListView) findViewById(R.id.boardList);
+        // Assign adapter to ListView
+        listView.setAdapter(boardListAdapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+                // Get the cursor, positioned to the corresponding row in the result set
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+                // Get the state's capital from this row in the database.
+                String countryCode = cursor.getString(cursor.getColumnIndexOrThrow("code"));
+                Toast.makeText(getApplicationContext(), countryCode, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
+                Log.v("long clicked","pos: " + position);
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+                Board editBoard = new Board(
+                                        cursor.getInt(cursor.getColumnIndexOrThrow("_id")),
+                                        cursor.getString(cursor.getColumnIndexOrThrow("filePath")),
+                                        cursor.getString(cursor.getColumnIndexOrThrow("subject")),
+                                        cursor.getString(cursor.getColumnIndexOrThrow("tag")),
+                                        cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                                        cursor.getDouble(cursor.getColumnIndexOrThrow("latitude")),
+                                        cursor.getDouble(cursor.getColumnIndexOrThrow("longitude")));
+                editBoard(editBoard);
+                return true;
+            }
+        }); 
+
+        /*EditText myFilter = (EditText) findViewById(R.id.myFilter);
+        myFilter.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                boardListAdapter.getFilter().filter(s.toString());
+            }
+        });
+
+        boardListAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            public Cursor runQuery(CharSequence constraint) {
+                return quadroDBHelper.fetchBoardsBySubject(constraint.toString());
+            }
+        });*/
+
     }
 
 
@@ -222,6 +330,12 @@ public class Home extends AppCompatActivity
     public void newBoard() {
         Intent addBoardIntent = new Intent(Home.this, AddBoard.class);
         Home.this.startActivity(addBoardIntent);
+    }
+
+    public void editBoard(Board board) {
+        Intent editBoardIntent = new Intent(Home.this, EditBoard.class);
+        editBoardIntent.putExtra("editBoard", board);
+        Home.this.startActivity(editBoardIntent);
     }
 
 

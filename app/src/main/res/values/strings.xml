@@ -8,6 +8,8 @@
 
     // Board
     <string name="add_board">Novo Quadro</string>
+    <string name="subject_title">Matéria</string>
+    <string name="subject_hint">Matéria</string>
     <string name="tag_title">Tag:</string>
     <string name="tag_hint">Tag</string>
     <string name="location_title">Local:</string>
