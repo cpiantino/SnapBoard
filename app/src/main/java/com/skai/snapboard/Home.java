@@ -97,9 +97,9 @@ public class Home extends AppCompatActivity
         Board newBoard = (Board)getIntent().getSerializableExtra("newBoard");
         Board editBoard = (Board)getIntent().getSerializableExtra("editBoard");
         Board deleteBoard = (Board)getIntent().getSerializableExtra("deleteBoard");
-        if (newBoard != null) { quadroDBHelper.addBoard(newBoard); boardListAdapter.notifyDataSetChanged(); }
-        if (editBoard != null) { quadroDBHelper.updateBoard(editBoard); boardListAdapter.notifyDataSetChanged(); }
-        if (deleteBoard != null) { quadroDBHelper.deleteBoard(deleteBoard); boardListAdapter.notifyDataSetChanged(); }
+        if (newBoard != null) { quadroDBHelper.addBoard(newBoard); displayListView(); }
+        if (editBoard != null) { quadroDBHelper.updateBoard(editBoard); displayListView(); }
+        if (deleteBoard != null) { quadroDBHelper.deleteBoard(deleteBoard); displayListView(); }
         }
 
     // Initialize DB
