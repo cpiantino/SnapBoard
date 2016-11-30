@@ -23,7 +23,9 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class AddBoard extends AppCompatActivity {
 
@@ -97,7 +99,11 @@ public class AddBoard extends AppCompatActivity {
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        Date currentDate = calendar.getTime();
+        currentDateTimeString = DateFormat.getDateTimeInstance().format(currentDate);
 
         EditText subjectText = (EditText) findViewById(R.id.subjectEditText);
         TextView latitudeText = (TextView) findViewById(R.id.locationTextView);
