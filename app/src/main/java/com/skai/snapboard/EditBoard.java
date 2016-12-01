@@ -83,9 +83,10 @@ public class EditBoard extends AppCompatActivity {
         }
 
         subjectText.setText(editBoard.getSubject());
-        tagText.setText(editBoard.getTag());
+        String preTag = editBoard.getTag();
+        if (preTag.contains(editBoard.getSubject())) tagText.setText(editBoard.getTag());
+        else tagText.setText(editBoard.getSubject()+": "+editBoard.getTag());
         dateText.setText(editBoard.getDate());
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+editBoard.getDate());
     }
 
     // Location Search
@@ -109,7 +110,7 @@ public class EditBoard extends AppCompatActivity {
         id = editBoard.getId();
         filepath = editBoard.getFilePath();
         subject = subjectText.getText().toString();
-        tag = tagText.getText().toString();
+        tag = subject+": "+tagText.getText().toString();
         date = dateText.getText().toString();
         latitude = editBoard.getLatitude();
         longitude = editBoard.getLongitude();

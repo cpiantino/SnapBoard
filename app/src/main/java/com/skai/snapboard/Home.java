@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
@@ -37,6 +38,8 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
+
+import static android.R.color.transparent;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
@@ -56,7 +59,7 @@ public class Home extends AppCompatActivity
     private SimpleCursorAdapter boardListAdapter;
 
     // Variable for Drawer
-    DrawerLayout drawer;
+    private DrawerLayout drawer;
     private Menu menu;
 
     @Override
@@ -100,14 +103,13 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Refresh Drawer
-        menu = navigationView.getMenu();
-        if (subjectDBHelper != null) { System.out.println("refreshing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"); refreshDrawer(); }
-
         // Initialize DB
         boardDBHelper = new BoardDBHelper(this);
         subjectDBHelper = new SubjectDBHelper(this);
-        // if (boardDBHelper != null) clearAll();
+
+        // Refresh Drawer
+        menu = navigationView.getMenu();
+        if (subjectDBHelper != null) populateDrawer();
 
         //Generate ListView from SQLite Database
         if (boardDBHelper.fetchAllBoards() != null) displayListView();
@@ -204,7 +206,7 @@ public class Home extends AppCompatActivity
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(cursor.getString(cursor.getColumnIndexOrThrow("filePath"))), "image/*");
+                intent.setDataAndType(Uri.parse("file:"+cursor.getString(cursor.getColumnIndexOrThrow("filePath"))), "image/*");
                 startActivity(intent);
             }
         });
@@ -292,17 +294,85 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {newBoard();}
-        else if (id == R.id.nav_subjects) {}
         else if (id == R.id.nav_add_subject) {newSubject();}
+        else if (id == R.id.nav_subjects) {
+            EditText filter = (EditText)findViewById(R.id.tagFilter);
+            filter.setText("");
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void refreshDrawer() {
+
+
+
+    //----------------------------------Drawer Items------------------------------------------
+    //----------------------------------------------------------------------------------------
+    private void populateDrawer() {
+        // Get Subjects
         List<Subject> allSubjects = subjectDBHelper.getAllSubjects();
-        for (Subject subject : allSubjects) menu.add(subject.getSubject());
+
+        // Populate Subjects
+        int id = 0;
+        for (final Subject subject : allSubjects) {
+            final MenuItem item = menu.add(0, id++, 0, subject.getSubject());
+            item.setIcon(R.drawable.ic_menu_gallery);
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    drawer.closeDrawer(GravityCompat.START);
+                    EditText filter = (EditText)findViewById(R.id.tagFilter);
+                    filter.setText(subject.getSubject());
+                    return true;
+                }
+            });
+            /** set action view */
+            ImageButton imageButton = new ImageButton(this);
+            imageButton.setImageResource(R.mipmap.btn_close_small);
+            imageButton.setBackgroundColor(getResources().getColor(transparent));
+            item.setActionView(imageButton); // this is a Context.class object
+            /** set listener  on action view */
+            item.getActionView().setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final int id = item.getItemId();
+                    deleteSubject(item.getTitle().toString());
+                    menu.removeItem(id);
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void addToDrawer(final Subject subject) {
+        final MenuItem item = menu.add(0, menu.size(), 0, subject.getSubject());
+        item.setIcon(R.drawable.ic_menu_gallery);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                drawer.closeDrawer(GravityCompat.START);
+                EditText filter = (EditText)findViewById(R.id.tagFilter);
+                filter.setText(subject.getSubject());
+                return true;
+            }
+        });
+        /** set action view */
+        ImageButton imageButton = new ImageButton(this);
+        imageButton.setImageResource(R.mipmap.btn_close_small);
+        imageButton.setBackgroundColor(getResources().getColor(transparent));
+        item.setActionView(imageButton); // this is a Context.class object
+        /** set listener  on action view */
+        item.getActionView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final int id = item.getItemId();
+                deleteSubject(item.getTitle().toString());
+                menu.removeItem(id);
+                return false;
+            }
+        });
     }
 
 
@@ -392,10 +462,15 @@ public class Home extends AppCompatActivity
             String[] hourMinEnd = subject.getEnd().split(",");
             int hourEnd = Integer.parseInt(hourMinEnd[0]);
             int minuteEnd = Integer.parseInt(hourMinEnd[1]);
+            System.out.println("!!!!!!!!!!!!!! "+subject.getSubject()+" "+hourStart+":"+minuteStart+" "+hourNow+":"+minuteNow+" "+hourEnd+":"+minuteEnd);
             if (today.compareTo(subject.getDay())==0) {
+                System.out.println("true 1");
                 if ((hourStart<=hourNow)      && (hourNow<=hourEnd)) {
+                    System.out.println("true 2");
                     if ((minuteStart<=minuteNow)  && ((minuteNow<=minuteEnd)||minuteEnd==0)) {
+                        System.out.println("true 3");
                         suggestion = subject.getSubject();
+                        System.out.println(suggestion);
                     }
                 }
             }
@@ -451,6 +526,7 @@ public class Home extends AppCompatActivity
                 if (start.length()>0 && end.length()>0) {
                     newSubject = new Subject(subjectName, day, start, end);
                     subjectDBHelper.addSubject(newSubject);
+                    addToDrawer(newSubject);
                     dialog.dismiss();
                 }
             }
@@ -463,5 +539,9 @@ public class Home extends AppCompatActivity
         });
 
         dialog.show();
+    }
+
+    private void deleteSubject(String subjectName) {
+        subjectDBHelper.deleteSubject(subjectName);
     }
 }

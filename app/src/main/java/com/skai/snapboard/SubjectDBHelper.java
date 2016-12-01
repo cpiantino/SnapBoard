@@ -201,6 +201,22 @@ public class SubjectDBHelper extends SQLiteOpenHelper {
 
     }
 
+    // Deleting single subject by name
+    public void deleteSubject(String subjectName) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_SUBJECTS,
+                KEY_SUBJECT+" = ?",
+                new String[] { String.valueOf(subjectName) });
+
+        // 3. close
+        db.close();
+
+    }
+
     public Cursor fetchSubjectsByDay(String inputText) {
         Log.w(TAG, inputText);
 

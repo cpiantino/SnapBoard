@@ -5,13 +5,13 @@
     // Navigation
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="tagFilterHint">Buscar tags...</string>
+    <string name="tagFilterHint">Buscar...</string>
 
     // Board
     <string name="add_board">Novo Quadro</string>
     <string name="subject_title">Matéria</string>
     <string name="subject_hint">Matéria</string>
-    <string name="tag_title">Tag:</string>
+    <string name="tag_title">Tags</string>
     <string name="tag_hint">Tag</string>
     <string name="location_title">Local:</string>
     <string name="date_title">Data e Hora</string>
@@ -38,7 +38,7 @@
 
     // Menu
     <string name="submenu_title">Matérias</string>
-    <string name="view_subjects_button">Materias</string>
+    <string name="view_subjects_button">Todas</string>
     <string name="action_settings">Settings</string>
 
 </resources>

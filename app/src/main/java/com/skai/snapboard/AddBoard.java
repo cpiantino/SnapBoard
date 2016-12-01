@@ -53,6 +53,9 @@ public class AddBoard extends AppCompatActivity {
     // Variable for date
     String date;
 
+    // Variable for subject suggestion
+    String subjectSuggestion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,8 @@ public class AddBoard extends AppCompatActivity {
             location = senLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             } catch (SecurityException e) {
         }
+
+        subjectSuggestion = (String)getIntent().getSerializableExtra("subjectSuggestion");
 
         startBoardCapture();
     }
@@ -114,6 +119,9 @@ public class AddBoard extends AppCompatActivity {
         date = Calendar.getInstance().getTime().toString();
         TextView dataText = (TextView) findViewById(R.id.dateTextView);
         dataText.setText(date);
+
+        EditText subjectEditText = (EditText) findViewById(R.id.subjectEditText);
+        if (!(subjectSuggestion == null)) subjectEditText.setText(subjectSuggestion);
     }
 
     public Address searchAddress(double latitude, double longitude) throws IOException {
@@ -189,9 +197,13 @@ public class AddBoard extends AppCompatActivity {
     private void saveData(String photo, double latitude, double longitude, String date) {
         Board board;
         EditText subjectEditText = (EditText)findViewById(R.id.subjectEditText);
-        subject = subjectEditText.getText().toString();
+        if (subjectSuggestion == null) subject = subjectEditText.getText().toString();
+        else subject = subjectSuggestion;
+        System.out.println("SUGGESTION !!!!!!!!!!!!!! "+subjectSuggestion);
         EditText tagEditText = (EditText)findViewById(R.id.tagEditText);
-        tag = tagEditText.getText().toString();
+        String preTag = tagEditText.getText().toString();
+        if (!preTag.contains(subject)) tag = subject+": "+tagEditText.getText().toString();
+        else tag = preTag;
         board = new Board(photo, subject, tag, date, latitude, longitude);
         captureComplete = false;
         deleteData(board);
