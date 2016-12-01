@@ -55,6 +55,10 @@ public class Home extends AppCompatActivity
     // Variables for ListView
     private SimpleCursorAdapter boardListAdapter;
 
+    // Variable for Drawer
+    DrawerLayout drawer;
+    private Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,13 +92,17 @@ public class Home extends AppCompatActivity
         fab.setBackgroundColor(0x3F51B5);*/
 
         // Drawer Menu Layout
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Refresh Drawer
+        menu = navigationView.getMenu();
+        if (subjectDBHelper != null) { System.out.println("refreshing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"); refreshDrawer(); }
 
         // Initialize DB
         boardDBHelper = new BoardDBHelper(this);
@@ -290,6 +298,11 @@ public class Home extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void refreshDrawer() {
+        List<Subject> allSubjects = subjectDBHelper.getAllSubjects();
+        for (Subject subject : allSubjects) menu.add(subject.getSubject());
     }
 
 

@@ -11,8 +11,10 @@
 
     <TextView android:id="@+id/subject"
         android:text="SUBJECT"
+        android:textStyle="bold"
+        android:textSize="20dp"
 
-        android:layout_margin="8dp"
+        android:layout_margin="3dp"
         android:layout_toRightOf="@id/board"
         android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
@@ -20,8 +22,9 @@
 
     <TextView android:id="@+id/tag"
         android:text="TAGTAGTAG"
+        android:textSize="18dp"
 
-        android:layout_margin="8dp"
+        android:layout_margin="3dp"
         android:layout_toRightOf="@id/board"
         android:layout_below="@id/subject"
         android:layout_width="wrap_content"
@@ -29,7 +32,7 @@
 
     <TextView android:id="@+id/date"
 
-        android:layout_margin="8dp"
+        android:layout_margin="5dp"
         android:text="dd/mm/yyyy hh/mm"
         android:layout_toRightOf="@id/board"
         android:layout_below="@id/tag"

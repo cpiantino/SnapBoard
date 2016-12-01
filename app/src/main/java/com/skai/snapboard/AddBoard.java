@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
@@ -48,7 +49,9 @@ public class AddBoard extends AppCompatActivity {
     private double latitude = 0.0;
     private double longitude = 0.0;
     private Address address;
-    String currentDateTimeString = "";
+
+    // Variable for date
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,20 +102,17 @@ public class AddBoard extends AppCompatActivity {
             longitude = location.getLongitude();
         }
 
-        TextView latitudeText = (TextView) findViewById(R.id.locationTextView);
+        TextView locationText = (TextView) findViewById(R.id.locationTextView);
 
         try {
             address = searchAddress(latitude, longitude);
-            latitudeText.setText(address.getAddressLine(0) + " - " + address.getAddressLine(1));
+            locationText.setText(address.getAddressLine(0) + " - " + address.getAddressLine(1));
         } catch (IOException e) {
             Log.i("GPS", e.getMessage());
         }
 
-        String date = Calendar.getInstance().getTime().toString();
-
+        date = Calendar.getInstance().getTime().toString();
         TextView dataText = (TextView) findViewById(R.id.dateTextView);
-
-    //   latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
         dataText.setText(date);
     }
 
@@ -146,7 +146,7 @@ public class AddBoard extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         captureComplete = true;
         return image;
     }
@@ -156,16 +156,15 @@ public class AddBoard extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
+                Bitmap mBitmapInsurance;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 16;
+                mBitmapInsurance = BitmapFactory.decodeFile(mCurrentPhotoPath,options);
+
                 mImageView = (ImageView) findViewById(R.id.boardView);
-                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
 
-                /*float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
-                int width = 480;
-                int height = Math.round(width / aspectRatio);
-                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);*/
-
-                mImageView.setImageBitmap(mImageBitmap);
-            } catch (IOException e) {
+                mImageView.setImageBitmap(mBitmapInsurance);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -173,7 +172,7 @@ public class AddBoard extends AppCompatActivity {
 
     // Salvar Quadro no BD
     public void saveData(View view) {
-        if (mCurrentPhotoPath!=null && captureComplete) saveData(mCurrentPhotoPath, latitude, longitude, currentDateTimeString);
+        if (mCurrentPhotoPath!=null && captureComplete) saveData(mCurrentPhotoPath, latitude, longitude, date);
         else {
             AlertDialog alertDialog = new AlertDialog.Builder(AddBoard.this).create();
             alertDialog.setTitle("Não há quadro!");

@@ -28,7 +28,7 @@ public class BoardCustomAdapter extends CursorAdapter {
 
     public void bindView(View view, Context context, Cursor cursor) {
 
-        File image = new File(cursor.getString( cursor.getColumnIndex(BoardDBHelper.KEY_FILEPATH )));
+        File image = new File(cursor.getString(cursor.getColumnIndex(BoardDBHelper.KEY_FILEPATH)));
         Bitmap mBitmapInsurance;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 16;
