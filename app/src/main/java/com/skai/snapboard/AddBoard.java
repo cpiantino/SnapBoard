@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 public class AddBoard extends AppCompatActivity {
 
@@ -44,6 +47,7 @@ public class AddBoard extends AppCompatActivity {
     private Location location;
     private double latitude = 0.0;
     private double longitude = 0.0;
+    private Address address;
     String currentDateTimeString = "";
 
     @Override
@@ -90,15 +94,41 @@ public class AddBoard extends AppCompatActivity {
             Log.i(TAG, "Security Exception");
         }
 
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        if(location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
 
         TextView latitudeText = (TextView) findViewById(R.id.locationTextView);
+
+        try {
+            address = searchAddress(latitude, longitude);
+            latitudeText.setText(address.getAddressLine(0) + address.getAddressLine(1));
+        } catch (IOException e) {
+            Log.i("GPS", e.getMessage());
+        }
+
+        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
         TextView dataText = (TextView) findViewById(R.id.dateTextView);
 
-        latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
+    //    latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
         dataText.setText(currentDateTimeString);
+    }
+
+    public Address searchAddress(double latitude, double longitude) throws IOException {
+        Geocoder geocoder;
+        Address address = null;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getApplicationContext());
+
+        addresses = geocoder.getFromLocation(latitude, longitude, 1);
+        if(addresses.size() > 0) {
+            address = addresses.get(0);
+        }
+
+        return address;
     }
 
     // Get path absoluto da imagem

@@ -60,7 +60,8 @@ public class Home extends AppCompatActivity
         String[] permissions =
                 {Manifest.permission.WRITE_EXTERNAL_STORAGE,
                  Manifest.permission.CAMERA,
-                 Manifest.permission.ACCESS_FINE_LOCATION};
+                 Manifest.permission.ACCESS_FINE_LOCATION,
+                 Manifest.permission.INTERNET};
         ActivityCompat.requestPermissions(Home.this, permissions, 1);
 
         // Initialize Shake Sensors
