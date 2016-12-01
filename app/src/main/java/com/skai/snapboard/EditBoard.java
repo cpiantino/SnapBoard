@@ -52,12 +52,10 @@ public class EditBoard extends AppCompatActivity {
             options.inSampleSize = 1;
             mImageBitmap = BitmapFactory.decodeFile(editBoard.getFilePath(),options);
 
-            float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
+            /*float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
             int width = 480;
             int height = Math.round(width / aspectRatio);
-            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);
-
-            System.out.println(mImageBitmap==null?"null":"bit exists");
+            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);*/
 
             mImageView.setImageBitmap(mImageBitmap);
         } catch (Exception e) {

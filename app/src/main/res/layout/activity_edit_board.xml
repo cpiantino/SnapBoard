@@ -102,8 +102,6 @@
 
         android:layout_height="260dp"
         android:layout_width="400dp"
-        android:layout_alignParentTop="true"
-        android:foregroundGravity="center"
-        android:layout_toEndOf="@+id/locationTextView" />
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>
