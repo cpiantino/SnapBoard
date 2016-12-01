@@ -179,7 +179,7 @@ public class Home extends AppCompatActivity
                 BoardDBHelper.KEY_DATE
         };
 
-        // create the adapter using the cursor pointing to the desired data 
+        // create the adapter using the cursor pointing to the desired data
         //as well as the layout information
         final BoardCustomAdapter boardListAdapter = new BoardCustomAdapter(this, cursor, 0);
 
