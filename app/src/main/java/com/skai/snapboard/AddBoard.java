@@ -103,7 +103,7 @@ public class AddBoard extends AppCompatActivity {
 
         try {
             address = searchAddress(latitude, longitude);
-            latitudeText.setText(address.getAddressLine(0) + address.getAddressLine(1));
+            latitudeText.setText(address.getAddressLine(0) + " - " + address.getAddressLine(1));
         } catch (IOException e) {
             Log.i("GPS", e.getMessage());
         }
