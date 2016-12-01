@@ -64,6 +64,9 @@ public class SubjectDBHelper extends SQLiteOpenHelper {
     private static final String KEY_START = "start";
     private static final String KEY_END = "end";
 
+    // TAG for filtered query
+    private static final String TAG = "SubjectDBHelper";
+
     private static final String[] COLUMNS = {KEY_ID,KEY_SUBJECT,KEY_DAY,KEY_START,KEY_END};
 
     public void addSubject(Subject subject){
@@ -196,5 +199,27 @@ public class SubjectDBHelper extends SQLiteOpenHelper {
 
         Log.d("deleteSubject", subject.toString());
 
+    }
+
+    public Cursor fetchSubjectsByDay(String inputText) {
+        Log.w(TAG, inputText);
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor mCursor = null;
+        if (inputText == null  ||  inputText.length () == 0)  {
+            mCursor = db.query(TABLE_SUBJECTS, new String[] {KEY_ID,KEY_SUBJECT,KEY_DAY,KEY_START,KEY_END},
+                    null, null, null, null, null);
+
+        }
+        else {
+            mCursor = db.query(true, TABLE_SUBJECTS, new String[] {KEY_ID,KEY_SUBJECT,KEY_DAY,KEY_START,KEY_END}, KEY_SUBJECT + " like '%" + inputText + "%'", null,
+                    null, null, null, null);
+        }
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
     }
 }
