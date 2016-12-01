@@ -45,7 +45,7 @@ public class AddBoard extends AppCompatActivity {
 
     // Variables for acquiring location
     private LocationManager senLocationManager;
-    private Location location;LOL
+    private Location location;
     private double latitude = 0.0;
     private double longitude = 0.0;
     private Address address;
@@ -197,9 +197,7 @@ public class AddBoard extends AppCompatActivity {
     private void saveData(String photo, double latitude, double longitude, String date) {
         Board board;
         EditText subjectEditText = (EditText)findViewById(R.id.subjectEditText);
-        if (subjectSuggestion == null) subject = subjectEditText.getText().toString();
-        else subject = subjectSuggestion;
-        System.out.println("SUGGESTION !!!!!!!!!!!!!! "+subjectSuggestion);
+        subject = subjectEditText.getText().toString();
         EditText tagEditText = (EditText)findViewById(R.id.tagEditText);
         String preTag = tagEditText.getText().toString();
         if (!preTag.contains(subject)) tag = subject+": "+tagEditText.getText().toString();
