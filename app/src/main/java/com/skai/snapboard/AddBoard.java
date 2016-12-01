@@ -45,7 +45,7 @@ public class AddBoard extends AppCompatActivity {
 
     // Variables for acquiring location
     private LocationManager senLocationManager;
-    private Location location;LOL
+    private Location location;
     private double latitude = 0.0;
     private double longitude = 0.0;
     private Address address;
