@@ -45,7 +45,7 @@
     <string name="action_settings">Settings</string>
     <string name="none_button_on">Desligar</string>
     <string name="none_button_off">Ligar</string>
-    <string name="low_button_on">Ligar (sel)</string>
+    <string name="low_button_on">Baixa (sel)</string>
     <string name="low_button_off">Baixa</string>
     <string name="high_button_on">Alta (sel)</string>
     <string name="high_button_off">Alta</string>
