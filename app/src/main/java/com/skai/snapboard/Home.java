@@ -49,7 +49,7 @@ public class Home extends AppCompatActivity
     private static final int SHAKE_THRESHOLD = 800;
 
     // Databases
-    private QuadroDBHelper quadroDBHelper;
+    private BoardDBHelper boardDBHelper;
     private SubjectDBHelper subjectDBHelper;
 
     // Variables for ListView
@@ -96,25 +96,25 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Initialize DB
-        quadroDBHelper = new QuadroDBHelper(this);
+        boardDBHelper = new BoardDBHelper(this);
         subjectDBHelper = new SubjectDBHelper(this);
-        // if (quadroDBHelper != null) clearAll();
+        // if (boardDBHelper != null) clearAll();
 
         //Generate ListView from SQLite Database
-        if (quadroDBHelper.fetchAllBoards() != null) displayListView();
+        if (boardDBHelper.fetchAllBoards() != null) displayListView();
 
         // Try add new Board or edit Board
         Board newBoard = (Board)getIntent().getSerializableExtra("newBoard");
         Board editBoard = (Board)getIntent().getSerializableExtra("editBoard");
         Board deleteBoard = (Board)getIntent().getSerializableExtra("deleteBoard");
-        if (newBoard != null) { quadroDBHelper.addBoard(newBoard); displayListView(); }
-        if (editBoard != null) { quadroDBHelper.updateBoard(editBoard); displayListView(); }
-        if (deleteBoard != null) { quadroDBHelper.deleteBoard(deleteBoard); displayListView(); }
+        if (newBoard != null) { boardDBHelper.addBoard(newBoard); displayListView(); }
+        if (editBoard != null) { boardDBHelper.updateBoard(editBoard); displayListView(); }
+        if (deleteBoard != null) { boardDBHelper.deleteBoard(deleteBoard); displayListView(); }
         }
 
     // Initialize DB
     private void clearAll() {
-        quadroDBHelper.getWritableDatabase().delete(QuadroDBHelper.DATABASE_NAME, null, null);
+        boardDBHelper.getWritableDatabase().delete(BoardDBHelper.DATABASE_NAME, null, null);
     }
 
 
@@ -152,14 +152,14 @@ public class Home extends AppCompatActivity
     private void displayListView() {
 
 
-        Cursor cursor = quadroDBHelper.fetchAllBoards();
+        Cursor cursor = boardDBHelper.fetchAllBoards();
 
         // The desired columns to be bound
         String[] columns = new String[] {
-                QuadroDBHelper.KEY_FILEPATH,
-                QuadroDBHelper.KEY_SUBJECT,
-                QuadroDBHelper.KEY_TAG,
-                QuadroDBHelper.KEY_DATE
+                BoardDBHelper.KEY_FILEPATH,
+                BoardDBHelper.KEY_SUBJECT,
+                BoardDBHelper.KEY_TAG,
+                BoardDBHelper.KEY_DATE
         };
 
         // the XML defined views which the data will be bound to
@@ -170,14 +170,17 @@ public class Home extends AppCompatActivity
                 R.id.date
         };
 
+        // Your database schema
+        String[] mProjection = {
+                BoardDBHelper.KEY_FILEPATH,
+                BoardDBHelper.KEY_SUBJECT,
+                BoardDBHelper.KEY_TAG,
+                BoardDBHelper.KEY_DATE
+        };
+
         // create the adapter using the cursor pointing to the desired data 
         //as well as the layout information
-        boardListAdapter = new SimpleCursorAdapter(
-                this, R.layout.board_item,
-                cursor,
-                columns,
-                to,
-                0);
+        final BoardCustomAdapter boardListAdapter = new BoardCustomAdapter(this, cursor, 0);
 
         ListView listView = (ListView) findViewById(R.id.boardList);
         // Assign adapter to ListView
@@ -231,7 +234,7 @@ public class Home extends AppCompatActivity
 
         boardListAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence constraint) {
-                return quadroDBHelper.fetchBoardsByTag(constraint.toString());
+                return boardDBHelper.fetchBoardsByTag(constraint.toString());
             }
         });
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
@@ -128,7 +129,7 @@ public class AddBoard extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         captureComplete = true;
         return image;
     }
@@ -139,15 +140,15 @@ public class AddBoard extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
                 mImageView = (ImageView) findViewById(R.id.boardView);
-                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
 
-                float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
-                int width = 480;
-                int height = Math.round(width / aspectRatio);
-                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);
+                File image = new File(mCurrentPhotoPath);
+                mImageBitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),options);
 
+                //mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
                 mImageView.setImageBitmap(mImageBitmap);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
