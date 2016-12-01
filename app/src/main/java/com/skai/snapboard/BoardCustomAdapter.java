@@ -32,7 +32,7 @@ public class BoardCustomAdapter extends CursorAdapter {
         System.out.println(image==null?"null":"image exists");
         Bitmap mBitmapInsurance;
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
+        options.inSampleSize = 16;
         mBitmapInsurance = BitmapFactory.decodeFile(image.getAbsolutePath(),options);
         System.out.println(mBitmapInsurance==null?"null":"bitmap exists");
 

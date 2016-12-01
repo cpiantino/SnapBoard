@@ -147,7 +147,7 @@ public class AddBoard extends AppCompatActivity {
                 mImageBitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),options);
 
                 float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
-                int width = 120;
+                int width = 400;
                 int height = Math.round(width / aspectRatio);
                 mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);
                 
