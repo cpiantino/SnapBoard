@@ -101,7 +101,7 @@
     <ImageView android:id="@+id/boardView"
 
         android:layout_height="240dp"
-        android:layout_width="400dp"
+        android:layout_width="fill_parent"
         android:layout_alignParentTop="true"
         android:foregroundGravity="center"
         android:layout_toEndOf="@+id/locationTextView" />

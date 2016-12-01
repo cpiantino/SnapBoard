@@ -29,12 +29,10 @@ public class BoardCustomAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
 
         File image = new File(cursor.getString( cursor.getColumnIndex(BoardDBHelper.KEY_FILEPATH )));
-        System.out.println(image==null?"null":"image exists");
         Bitmap mBitmapInsurance;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 16;
         mBitmapInsurance = BitmapFactory.decodeFile(image.getAbsolutePath(),options);
-        System.out.println(mBitmapInsurance==null?"null":"bitmap exists");
 
         ImageView imageView = (ImageView) view.findViewById(R.id.board);
         imageView.setImageBitmap(mBitmapInsurance);

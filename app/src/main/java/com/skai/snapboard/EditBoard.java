@@ -3,6 +3,7 @@ package com.skai.snapboard;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -45,18 +46,23 @@ public class EditBoard extends AppCompatActivity {
     //------------------------------------------------------------------------------------------
     @TargetApi(24)
     private void startBoardEdit() {
-/*        try {
-            mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(editBoard.getFilePath()));
+        try {
+            mImageView = (ImageView) findViewById(R.id.boardView);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 1;
+            mImageBitmap = BitmapFactory.decodeFile(editBoard.getFilePath(),options);
 
             float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
             int width = 480;
             int height = Math.round(width / aspectRatio);
             mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);
 
+            System.out.println(mImageBitmap==null?"null":"bit exists");
+
             mImageView.setImageBitmap(mImageBitmap);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
         subjectText = (EditText) findViewById(R.id.subjectEditText);
         tagText = (EditText) findViewById(R.id.tagEditText);
