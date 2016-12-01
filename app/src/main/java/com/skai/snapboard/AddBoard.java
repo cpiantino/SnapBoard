@@ -142,10 +142,15 @@ public class AddBoard extends AppCompatActivity {
                 mImageView = (ImageView) findViewById(R.id.boardView);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
-
+                
                 File image = new File(mCurrentPhotoPath);
                 mImageBitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),options);
 
+                float aspectRatio = mImageBitmap.getWidth() / (float) mImageBitmap.getHeight();
+                int width = 120;
+                int height = Math.round(width / aspectRatio);
+                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, width, height, false);
+                
                 //mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
                 mImageView.setImageBitmap(mImageBitmap);
             } catch (Exception e) {
