@@ -112,7 +112,7 @@ public class AddBoard extends AppCompatActivity {
 
         TextView dataText = (TextView) findViewById(R.id.dateTextView);
 
-    //    latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
+    //   latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
         dataText.setText(currentDateTimeString);
     }
 
