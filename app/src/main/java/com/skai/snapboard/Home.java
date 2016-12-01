@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Sensor;
@@ -16,7 +17,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -49,18 +49,21 @@ public class Home extends AppCompatActivity
     private Sensor senAccelerometer;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 800;
+    private int shakeThreshold = 800;
+    private boolean isShakeOn = true;
+    private static final int HIGH = 800;
+    private static final int LOW = 1600;
 
     // Databases
     private BoardDBHelper boardDBHelper;
     private SubjectDBHelper subjectDBHelper;
 
-    // Variables for ListView
-    private SimpleCursorAdapter boardListAdapter;
-
     // Variable for Drawer
     private DrawerLayout drawer;
     private Menu menu;
+
+    // Variable for Preferences
+    SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,17 @@ public class Home extends AppCompatActivity
                  Manifest.permission.ACCESS_FINE_LOCATION,
                  Manifest.permission.INTERNET};
         ActivityCompat.requestPermissions(Home.this, permissions, 1);
+
+        isShakeOn = true;
+        shakeThreshold = LOW;
+
+        // Read Settings
+        settings = this.getSharedPreferences("com.skai.snapboard", Context.MODE_PRIVATE);
+        if (settings!=null) {
+            isShakeOn = settings.getBoolean("com.skai.snapboard.is_shake_on", true);
+            shakeThreshold = settings.getInt("com.skai.snapboard.threshold", LOW);
+            System.out.println(isShakeOn+": "+shakeThreshold);
+        }
 
         // Initialize Shake Sensors
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -281,7 +295,55 @@ public class Home extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            // custom dialog
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.activity_settings);
+
+            // Variables from dialog
+            final Button noneButton = (Button) dialog.findViewById(R.id.noneButton);
+            final Button lowButton = (Button) dialog.findViewById(R.id.lowButton);
+            final Button highButton = (Button) dialog.findViewById(R.id.highButton);
+
+            // Initialize
+            if (isShakeOn) noneButton.setText(R.string.none_button_on); else noneButton.setText(R.string.none_button_off);
+            if (shakeThreshold == LOW) lowButton.setText(R.string.low_button_off); else lowButton.setText(R.string.low_button_on);
+            if (shakeThreshold == HIGH) highButton.setText(R.string.high_button_off); else highButton.setText(R.string.high_button_on);
+
+            // Button Handler
+            noneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isShakeOn) {
+                        noneButton.setText(R.string.none_button_off);
+                        isShakeOn = false;
+                        settings.edit().putBoolean("com.skai.snapboard.is_shake_on", isShakeOn).apply();
+                    }
+                    else {
+                        noneButton.setText(R.string.none_button_on);
+                        isShakeOn = true;
+                        settings.edit().putBoolean("com.skai.snapboard.is_shake_on", isShakeOn).apply();
+                    }
+                }
+            });
+            lowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lowButton.setText(R.string.low_button_on);
+                    highButton.setText(R.string.high_button_off);
+                    shakeThreshold = HIGH;
+                    settings.edit().putInt("com.skai.snapboard.threshold", shakeThreshold).apply();
+                }
+            });
+            highButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    highButton.setText(R.string.high_button_on);
+                    lowButton.setText(R.string.low_button_off);
+                    shakeThreshold = LOW;
+                    settings.edit().putInt("com.skai.snapboard.threshold", shakeThreshold).apply();
+                }
+            });
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -315,9 +377,8 @@ public class Home extends AppCompatActivity
         List<Subject> allSubjects = subjectDBHelper.getAllSubjects();
 
         // Populate Subjects
-        int id = 0;
         for (final Subject subject : allSubjects) {
-            final MenuItem item = menu.add(0, id++, 0, subject.getSubject());
+            final MenuItem item = menu.add(0, subject.getId(), 0, subject.getSubject());
             item.setIcon(R.drawable.ic_menu_gallery);
             item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
@@ -337,9 +398,8 @@ public class Home extends AppCompatActivity
             item.getActionView().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    final int id = item.getItemId();
-                    deleteSubject(item.getTitle().toString());
-                    menu.removeItem(id);
+                    deleteSubject(subject.getSubject());
+                    menu.removeItem(subject.getId());
                     return false;
                 }
             });
@@ -347,7 +407,7 @@ public class Home extends AppCompatActivity
     }
 
     private void addToDrawer(final Subject subject) {
-        final MenuItem item = menu.add(0, menu.size(), 0, subject.getSubject());
+        final MenuItem item = menu.add(0, subject.getId(), 0, subject.getSubject());
         item.setIcon(R.drawable.ic_menu_gallery);
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -367,9 +427,8 @@ public class Home extends AppCompatActivity
         item.getActionView().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final int id = item.getItemId();
-                deleteSubject(item.getTitle().toString());
-                menu.removeItem(id);
+                deleteSubject(subject.getSubject());
+                menu.removeItem(subject.getId());
                 return false;
             }
         });
@@ -404,7 +463,7 @@ public class Home extends AppCompatActivity
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
-                if (speed > SHAKE_THRESHOLD) {
+                if (speed > shakeThreshold && isShakeOn) {
                     newBoard();
                 }
 
@@ -420,7 +479,7 @@ public class Home extends AppCompatActivity
 
 
 
-    //-----------------------------------------Quadros----------------------------------------
+    //-----------------------------------------Boards-----------------------------------------
     //----------------------------------------------------------------------------------------
     public void newBoard() {
         Intent addBoardIntent = new Intent(Home.this, AddBoard.class);
@@ -462,16 +521,34 @@ public class Home extends AppCompatActivity
             String[] hourMinEnd = subject.getEnd().split(",");
             int hourEnd = Integer.parseInt(hourMinEnd[0]);
             int minuteEnd = Integer.parseInt(hourMinEnd[1]);
-            System.out.println("!!!!!!!!!!!!!! "+subject.getSubject()+" "+hourStart+":"+minuteStart+" "+hourNow+":"+minuteNow+" "+hourEnd+":"+minuteEnd);
+            System.out.println("--------------> "+subject.getSubject()+" "+hourStart+":"+minuteStart+" "+hourNow+":"+minuteNow+" "+hourEnd+":"+minuteEnd);
             if (today.compareTo(subject.getDay())==0) {
-                System.out.println("true 1");
-                if ((hourStart<=hourNow)      && (hourNow<=hourEnd)) {
-                    System.out.println("true 2");
-                    if ((minuteStart<=minuteNow)  && ((minuteNow<=minuteEnd)||minuteEnd==0)) {
-                        System.out.println("true 3");
-                        suggestion = subject.getSubject();
-                        System.out.println(suggestion);
+                if (hourStart == hourEnd) {
+                    if ((minuteStart<=minuteNow)&&(minuteNow<=minuteEnd)) {
+                        System.out.println("true c");
+                        suggestion=subject.getSubject();
                     }
+                }
+                else if (hourStart == hourNow) {
+                    System.out.println("true a");
+                    if (minuteStart<=minuteNow) {
+                        System.out.println("true a1");
+                        suggestion=subject.getSubject();
+                    }
+                }
+                else if ((hourStart<hourNow)&&(hourNow<hourEnd)) {
+                    System.out.println("true b");
+                    suggestion=subject.getSubject();
+                }
+                else if (hourEnd==hourNow) {
+                    System.out.println("true b");
+                    if (minuteNow <= minuteEnd) {
+                        System.out.println("true b1");
+                        suggestion = subject.getSubject();
+                    }
+                }
+                else {
+                    System.out.println("no match");
                 }
             }
         }
@@ -480,7 +557,7 @@ public class Home extends AppCompatActivity
 
 
 
-    //-----------------------------------------Matérias---------------------------------------
+    //-----------------------------------------Subjects---------------------------------------
     //----------------------------------------------------------------------------------------
     // Variables for making Subject
     private Subject newSubject;
@@ -500,6 +577,7 @@ public class Home extends AppCompatActivity
         Button saveButton = (Button) dialog.findViewById(R.id.saveButton);
         Button deleteButton = (Button) dialog.findViewById(R.id.deleteButton);
         final TimePicker timePicker = (TimePicker)dialog.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
 
         // Button Handler
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -527,6 +605,9 @@ public class Home extends AppCompatActivity
                     newSubject = new Subject(subjectName, day, start, end);
                     subjectDBHelper.addSubject(newSubject);
                     addToDrawer(newSubject);
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
                     dialog.dismiss();
                 }
             }

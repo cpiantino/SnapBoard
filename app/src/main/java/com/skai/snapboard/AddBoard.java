@@ -176,6 +176,7 @@ public class AddBoard extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        else deleteData((Board)null);
     }
 
     // Salvar Quadro no BD
