@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -108,12 +108,12 @@ public class AddBoard extends AppCompatActivity {
             Log.i("GPS", e.getMessage());
         }
 
-        currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        String date = Calendar.getInstance().getTime().toString();
 
         TextView dataText = (TextView) findViewById(R.id.dateTextView);
 
     //   latitudeText.setText("Lat:"+Double.toString(latitude)+"\nLon:"+Double.toString(longitude));
-        dataText.setText(currentDateTimeString);
+        dataText.setText(date);
     }
 
     public Address searchAddress(double latitude, double longitude) throws IOException {
